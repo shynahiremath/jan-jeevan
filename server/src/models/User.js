@@ -32,6 +32,13 @@ const userSchema = new mongoose.Schema(
       enum: ["citizen", "admin"],
       default: "citizen",
     },
+    profile: {
+      isFarmer: { type: Boolean, default: false },
+      gender: { type: String, enum: ["", "male", "female", "other"], default: "" },
+      hasDaughterUnder10: { type: Boolean, default: false },
+      isBusinessOwner: { type: Boolean, default: false },
+      hasOwnHouse: { type: Boolean, default: true },
+    },
   },
   { timestamps: true }
 );

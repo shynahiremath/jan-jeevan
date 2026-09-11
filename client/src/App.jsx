@@ -8,6 +8,7 @@ import Schemes from "./pages/Schemes";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import EMICalculator from "./pages/EMICalculator";
+import VoiceTest from "./pages/VoiceTest";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/finance/emi-calculator" element={<EMICalculator />} />
+          <Route path="/voice-test" element={<VoiceTest />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
