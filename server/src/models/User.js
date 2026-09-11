@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       trim: true,
+      index: true,
     },
     passwordHash: {
       type: String,
@@ -21,6 +22,10 @@ const userSchema = new mongoose.Schema(
     language: {
       type: String,
       default: "en",
+    },
+    location: {
+      state: { type: String, default: "" },
+      district: { type: String, default: "" },
     },
     userType: {
       type: String,

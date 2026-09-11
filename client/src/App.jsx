@@ -7,6 +7,7 @@ import Finance from "./pages/Finance";
 import Schemes from "./pages/Schemes";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import EMICalculator from "./pages/EMICalculator";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/schemes" element={<Schemes />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/finance/emi-calculator" element={<EMICalculator />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
