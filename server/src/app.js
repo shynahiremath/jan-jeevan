@@ -6,6 +6,7 @@ import authRoutes from "./routes/authRoutes.js";
 import financeRoutes from "./routes/financeRoutes.js";
 import schemesRoutes from "./routes/schemesRoutes.js";
 import weatherRoutes from "./routes/weatherRoutes.js";
+import mandiRoutes from "./routes/mandiRoutes.js";
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/finance", financeRoutes);
 app.use("/api/schemes", schemesRoutes);
 app.use("/api/weather", weatherRoutes);
+app.use("/api/mandi-prices", mandiRoutes);
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
