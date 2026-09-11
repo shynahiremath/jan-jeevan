@@ -1,0 +1,30 @@
+{
+  "appName": "Jan Setu",
+  "emergency": "Emergency",
+  "login": "Login",
+  "heroTitle": "One place for everyday help.",
+  "heroSubtitle": "Speak. Scan. Understand. Connect.",
+  "tapToSpeak": "TAP TO SPEAK",
+  "voiceComingSoon": "Voice feature coming soon",
+  "helpQuestion": "What do you need help with today?",
+  "pillars": {
+    "agriculture": {
+      "title": "Agriculture",
+      "description": "Weather, mandi prices, crop help"
+    },
+    "healthcare": {
+      "title": "Healthcare",
+      "description": "Symptom check, hospitals, reports"
+    },
+    "finance": {
+      "title": "Finance",
+      "description": "EMI calculator, fraud check, schemes"
+    },
+    "schemes": {
+      "title": "Govt. Schemes",
+      "description": "Find schemes you may qualify for"
+    }
+  },
+  "footerTagline": "A voice-first, visual-first digital public-service platform for underserved communities.",
+  "footerNote": "Built for a hackathon • Data sources credited within each feature"
+}
