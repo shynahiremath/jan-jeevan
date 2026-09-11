@@ -1,6 +1,11 @@
-function PillarCard({ icon, title, description, color }) {
+import { useNavigate } from "react-router-dom";
+
+function PillarCard({ icon, title, description, color, path }) {
+  const navigate = useNavigate();
+
   return (
     <div
+      onClick={() => navigate(path)}
       className={`rounded-2xl p-6 shadow-md hover:shadow-xl transition cursor-pointer border-2 ${color}`}
     >
       <div className="text-5xl mb-4">{icon}</div>
