@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import authRoutes from "./routes/authRoutes.js";
 import financeRoutes from "./routes/financeRoutes.js";
 import schemesRoutes from "./routes/schemesRoutes.js";
+import weatherRoutes from "./routes/weatherRoutes.js";
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.get("/api/health", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/finance", financeRoutes);
 app.use("/api/schemes", schemesRoutes);
+app.use("/api/weather", weatherRoutes);
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
