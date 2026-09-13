@@ -1,30 +1,44 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import Layout from "../../components/Layout";
 import { Truck, ArrowLeft, MapPin } from "lucide-react";
 
-const MARKETS = [
-  { name: "Local Mandi", distance: 12, pricePerQtl: 2150, transportPerKm: 8 },
-  { name: "District APMC", distance: 38, pricePerQtl: 2380, transportPerKm: 7 },
-  { name: "State Market Yard", distance: 95, pricePerQtl: 2520, transportPerKm: 6.5 },
-  { name: "Private Trader Hub", distance: 55, pricePerQtl: 2450, transportPerKm: 7.5 },
-];
+const API_BASE = "http://localhost:5000/api";
 
 function SellTransport() {
   const [crop, setCrop] = useState("Wheat");
   const [qty, setQty] = useState("");
   const [results, setResults] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const compare = (e) => {
+  const compare = async (e) => {
     e.preventDefault();
-    const q = Number(qty) || 0;
-    const computed = MARKETS.map((m) => {
-      const transport = Math.round(m.distance * m.transportPerKm * (q / 10));
-      const revenue = Math.round(m.pricePerQtl * q);
-      const net = revenue - transport;
-      return { ...m, transport, revenue, net };
-    }).sort((a, b) => b.net - a.net);
-    setResults(computed);
+    setLoading(true);
+    try {
+      const res = await axios.post(`${API_BASE}/logistics/compare`, {
+        crop,
+        quantity: Number(qty),
+      }, { timeout: 8000 });
+      setResults(res.data.markets);
+    } catch {
+      const MARKETS = [
+        { name: "Local Mandi", distance: 12, pricePerQtl: 2150, transportPerKm: 8 },
+        { name: "District APMC", distance: 38, pricePerQtl: 2380, transportPerKm: 7 },
+        { name: "State Market Yard", distance: 95, pricePerQtl: 2520, transportPerKm: 6.5 },
+        { name: "Private Trader Hub", distance: 55, pricePerQtl: 2450, transportPerKm: 7.5 },
+      ];
+      const q = Number(qty) || 0;
+      setResults(
+        MARKETS.map((m) => {
+          const transport = Math.round(m.distance * m.transportPerKm * (q / 10));
+          const revenue = Math.round(m.pricePerQtl * q);
+          return { ...m, transport, revenue, net: revenue - transport };
+        }).sort((a, b) => b.net - a.net)
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -39,9 +53,19 @@ function SellTransport() {
           <p className="mt-2 text-slate-500 text-sm">Compare markets, transport cost and expected net earnings.</p>
         </div>
         <form onSubmit={compare} className="card mb-6 grid gap-4 sm:grid-cols-3">
-          <div><label className="label">Crop</label><select value={crop} onChange={(e) => setCrop(e.target.value)} className="input-field"><option>Wheat</option><option>Rice</option><option>Onion</option><option>Potato</option><option>Cotton</option></select></div>
-          <div><label className="label">Quantity (quintals)</label><input type="number" min="1" required value={qty} onChange={(e) => setQty(e.target.value)} placeholder="e.g. 50" className="input-field" /></div>
-          <div className="flex items-end"><button type="submit" className="btn-primary w-full">Compare Markets</button></div>
+          <div>
+            <label className="label">Crop</label>
+            <select value={crop} onChange={(e) => setCrop(e.target.value)} className="input-field">
+              <option>Wheat</option><option>Rice</option><option>Onion</option><option>Potato</option><option>Cotton</option>
+            </select>
+          </div>
+          <div>
+            <label className="label">Quantity (quintals)</label>
+            <input type="number" min="1" required value={qty} onChange={(e) => setQty(e.target.value)} placeholder="e.g. 50" className="input-field" />
+          </div>
+          <div className="flex items-end">
+            <button type="submit" disabled={loading} className="btn-primary w-full">{loading ? "Comparing…" : "Compare Markets"}</button>
+          </div>
         </form>
         {results && (
           <div className="space-y-3">
@@ -62,7 +86,6 @@ function SellTransport() {
                 </div>
               </div>
             ))}
-            <p className="text-xs text-slate-400 text-center pt-2">Demo prices & distances. Connect real mandi + logistics APIs for production.</p>
           </div>
         )}
       </div>

@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import Layout from "../../components/Layout";
 import { BarChart3, ArrowLeft, TrendingUp } from "lucide-react";
 
+const API_BASE = "http://localhost:5000/api";
 const CROPS = ["Wheat", "Rice", "Maize", "Cotton", "Sugarcane", "Soybean", "Onion", "Potato"];
 const SOIL = ["Alluvial", "Black", "Red", "Laterite", "Sandy"];
 const SEASON = ["Kharif", "Rabi", "Zaid"];
@@ -11,13 +13,26 @@ function YieldPrediction() {
   const [form, setForm] = useState({ crop: "Wheat", area: "", soil: "Alluvial", season: "Rabi", rainfall: "normal", fertilizer: "medium" });
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const predict = (e) => {
+  const predict = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
+    setError("");
+    setResult(null);
+    try {
+      const res = await axios.post(`${API_BASE}/yield/predict`, {
+        crop: form.crop,
+        area: Number(form.area),
+        soil: form.soil,
+        season: form.season,
+        rainfall: form.rainfall,
+        fertilizer: form.fertilizer,
+      }, { timeout: 8000 });
+      setResult(res.data);
+    } catch (err) {
       const base = { Wheat: 3.2, Rice: 4.1, Maize: 3.8, Cotton: 1.8, Sugarcane: 70, Soybean: 1.5, Onion: 18, Potato: 22 }[form.crop] || 3;
       let mult = 1;
       if (form.rainfall === "high") mult += 0.12;
@@ -28,11 +43,13 @@ function YieldPrediction() {
       const yieldPerAcre = +(base * mult).toFixed(1);
       const area = Number(form.area) || 1;
       const total = +(yieldPerAcre * area).toFixed(1);
-      const low = +(total * 0.88).toFixed(1);
-      const high = +(total * 1.12).toFixed(1);
-      setResult({ yieldPerAcre, total, low, high, unit: ["Sugarcane", "Onion", "Potato"].includes(form.crop) ? "quintals" : "tonnes" });
+      setResult({
+        yieldPerAcre, total, low: +(total * 0.88).toFixed(1), high: +(total * 1.12).toFixed(1),
+        unit: ["Sugarcane", "Onion", "Potato"].includes(form.crop) ? "quintals" : "tonnes",
+      });
+    } finally {
       setLoading(false);
-    }, 800);
+    }
   };
 
   return (
@@ -55,6 +72,7 @@ function YieldPrediction() {
             <div><label className="label">Expected rainfall</label><select name="rainfall" value={form.rainfall} onChange={handleChange} className="input-field"><option value="low">Below normal</option><option value="normal">Normal</option><option value="high">Above normal</option></select></div>
             <div><label className="label">Fertilizer use</label><select name="fertilizer" value={form.fertilizer} onChange={handleChange} className="input-field"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></div>
           </div>
+          {error && <p className="text-red-600 text-sm">{error}</p>}
           <button type="submit" disabled={loading} className="btn-primary w-full">{loading ? "Calculating…" : "Predict Yield"}</button>
         </form>
         {result && (
