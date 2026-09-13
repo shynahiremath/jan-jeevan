@@ -1,89 +1,41 @@
 import { Link } from "react-router-dom";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
+import Layout from "../../components/Layout";
+import { Droplets, BarChart3, Truck, CloudSun, Leaf, Camera } from "lucide-react";
 
 const features = [
-  {
-    id: "weather",
-    icon: "🌦️",
-    title: "Weather & Smart Irrigation",
-    description: "Check today's weather and get watering advice for your crop.",
-    path: "/agriculture/weather",
-    status: "live-soon", // becomes "live" in Phase 12
-  },
-  {
-    id: "yield",
-    icon: "📊",
-    title: "Yield Prediction",
-    description: "Get an estimated range for your expected crop yield.",
-    path: "/agriculture/yield-prediction",
-    status: "coming-soon",
-  },
-  {
-    id: "mandi",
-    icon: "💰",
-    title: "Mandi Prices",
-    description: "See real government market prices for your crop.",
-    path: "/agriculture/mandi-prices",
-    status: "coming-soon",
-  },
-  {
-    id: "sell",
-    icon: "🚛",
-    title: "Sell & Transport",
-    description: "Request transport or list your crop for sale.",
-    path: "/agriculture/sell-transport",
-    status: "coming-soon",
-  },
-  {
-    id: "disease",
-    icon: "🌱",
-    title: "Crop Disease Detection",
-    description: "Scan your crop with your camera to check for common issues.",
-    path: "/agriculture/crop-disease",
-    status: "coming-soon",
-  },
+  { id: "irrigation", icon: <Droplets className="h-6 w-6" />, title: "Smart Irrigation", description: "Weather + soil & crop inputs → precise irrigation recommendation.", path: "/agriculture/weather", status: "live", color: "bg-sky-100 text-sky-700" },
+  { id: "yield", icon: <BarChart3 className="h-6 w-6" />, title: "Crop Yield Prediction", description: "Predict expected yield using crop, farm size and environmental data.", path: "/agriculture/yield-prediction", status: "live", color: "bg-emerald-100 text-emerald-700" },
+  { id: "logistics", icon: <Truck className="h-6 w-6" />, title: "Direct-to-Market Logistics", description: "Compare markets, transport cost and expected net earnings.", path: "/agriculture/sell-transport", status: "live", color: "bg-amber-100 text-amber-700" },
+  { id: "weather", icon: <CloudSun className="h-6 w-6" />, title: "Local Weather", description: "Real-time weather for your farm location.", path: "/agriculture/weather", status: "live", color: "bg-blue-100 text-blue-700" },
+  { id: "mandi", icon: <Leaf className="h-6 w-6" />, title: "Mandi Prices", description: "Live government market prices for your crop.", path: "/agriculture/mandi-prices", status: "live", color: "bg-green-100 text-green-700" },
+  { id: "disease", icon: <Camera className="h-6 w-6" />, title: "Crop Disease Scan", description: "Scan your crop with camera to detect common issues.", path: "/agriculture/crop-disease", status: "beta", color: "bg-violet-100 text-violet-700" },
 ];
 
 function AgricultureHome() {
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      <Header />
-      <main className="flex-1 max-w-5xl mx-auto px-4 py-10 w-full">
-        <div className="text-center mb-10">
-          <div className="text-5xl mb-2">🌾</div>
-          <h1 className="text-3xl font-bold text-gray-800">Agriculture</h1>
-          <p className="text-gray-500 text-sm mt-1">
-            Everyday farming help — weather, prices, and crop guidance.
-          </p>
+    <Layout>
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
+        <div className="mb-12 text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-100 text-4xl shadow-sm">🌾</div>
+          <h1 className="section-title mb-2">Agriculture</h1>
+          <p className="text-slate-500 max-w-md mx-auto">Smart tools for irrigation, yield planning and selling at the best price.</p>
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {features.map((feature) => (
-            <Link
-              key={feature.id}
-              to={feature.path}
-              className="border border-gray-200 rounded-2xl p-6 flex items-start gap-4 hover:shadow-md hover:border-green-300 transition bg-white"
-            >
-              <span className="text-4xl">{feature.icon}</span>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h2 className="font-bold text-gray-800">{feature.title}</h2>
-                  {feature.status === "coming-soon" && (
-                    <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
-                      Coming soon
-                    </span>
-                  )}
-                </div>
-                <p className="text-sm text-gray-500 mt-1">{feature.description}</p>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {features.map((f) => (
+            <Link key={f.id} to={f.path} className="group card-hover flex flex-col gap-4 !p-5">
+              <div className="flex items-start justify-between">
+                <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${f.color}`}>{f.icon}</div>
+                {f.status === "live" ? <span className="badge-green">Live</span> : <span className="badge-amber">Beta</span>}
+              </div>
+              <div>
+                <h2 className="font-bold text-slate-900 group-hover:text-brand-700 transition">{f.title}</h2>
+                <p className="mt-1 text-sm text-slate-500 leading-relaxed">{f.description}</p>
               </div>
             </Link>
           ))}
         </div>
-      </main>
-      <Footer />
-    </div>
+      </div>
+    </Layout>
   );
 }
-
 export default AgricultureHome;
