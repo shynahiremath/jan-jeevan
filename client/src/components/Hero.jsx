@@ -1,55 +1,49 @@
-import { useTranslation } from "react-i18next";
-import { Mic, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Leaf, HeartPulse, Wallet } from "lucide-react";
 
-function Hero() {
-  const { t } = useTranslation();
+export default function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-white to-orange-50" />
-      <div className="absolute -top-32 -right-32 h-[28rem] w-[28rem] rounded-full bg-gradient-to-br from-brand-300/40 to-teal-200/30 blur-3xl animate-blob" />
-      <div className="absolute -bottom-40 -left-32 h-96 w-96 rounded-full bg-gradient-to-tr from-accent-200/50 to-amber-100/40 blur-3xl animate-blob" style={{ animationDelay: "2s" }} />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-64 w-64 rounded-full bg-violet-200/20 blur-3xl animate-float" />
+    <section className="hero-mesh relative mx-4 mt-4 overflow-hidden rounded-[2rem] px-6 py-16 sm:mx-6 sm:px-10 sm:py-20 lg:mx-auto lg:max-w-6xl">
+      <div className="orb left-[-5%] top-[10%] h-56 w-56 bg-[#b8f34a]" />
+      <div className="orb right-[5%] bottom-[5%] h-64 w-64 bg-[#2ee6d6]" style={{ animationDelay: "1.5s" }} />
+      <div className="orb right-[30%] top-[5%] h-40 w-40 bg-[#8b7cff]" style={{ animationDelay: "3s" }} />
 
-      <div className="relative mx-auto max-w-6xl px-4 py-16 sm:py-28 sm:px-6">
-        <div className="mx-auto max-w-3xl text-center">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-200/80 bg-white/90 px-4 py-1.5 text-xs font-semibold text-brand-700 shadow-lg shadow-brand-500/10 backdrop-blur animate-fade-in-up">
-            <Sparkles className="h-3.5 w-3.5 text-amber-500" />
-            Voice-first • Visual-first • Built for Bharat
-          </div>
-
-          <h1 className="section-title mb-5 text-4xl sm:text-5xl lg:text-6xl !leading-[1.1] animate-fade-in-up stagger-1">
-            <span className="gradient-text">{t("heroTitle")}</span>
-          </h1>
-          <p className="mx-auto mb-12 max-w-xl text-lg text-slate-600 sm:text-xl animate-fade-in-up stagger-2">
-            {t("heroSubtitle")}
-          </p>
-
-          <div className="flex flex-col items-center gap-4 animate-fade-in-up stagger-3">
-            <button
-              className="group relative flex h-32 w-32 flex-col items-center justify-center rounded-full bg-gradient-to-br from-brand-400 via-brand-500 to-teal-600 text-white shadow-2xl shadow-brand-500/40 transition-all duration-300 hover:scale-110 active:scale-95 animate-pulse-glow"
-              aria-label="Tap to speak"
-            >
-              <span className="absolute inset-0 rounded-full bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity shimmer-bg" />
-              <Mic className="h-9 w-9 mb-1.5 relative z-10 transition group-hover:scale-110" />
-              <span className="text-[11px] font-bold tracking-wide uppercase relative z-10">{t("tapToSpeak")}</span>
-            </button>
-          </div>
-          <p className="mt-5 text-xs text-slate-400 animate-fade-in-up stagger-4">{t("voiceComingSoon")}</p>
-
-          <div className="mt-14 flex flex-wrap items-center justify-center gap-3 text-sm animate-fade-in-up stagger-5">
-            {[
-              { emoji: "🌾", label: "Agriculture", color: "from-emerald-50 to-green-50 border-emerald-200" },
-              { emoji: "🩺", label: "Healthcare", color: "from-rose-50 to-red-50 border-rose-200" },
-              { emoji: "💰", label: "Fin-Inclusion", color: "from-amber-50 to-yellow-50 border-amber-200" },
-            ].map((item) => (
-              <span key={item.label} className={`inline-flex items-center gap-2 rounded-full bg-gradient-to-r ${item.color} px-4 py-2 shadow-md border font-medium text-slate-700 transition hover:scale-105`}>
-                <span className="text-base">{item.emoji}</span> {item.label}
-              </span>
-            ))}
-          </div>
+      <div className="relative z-10 mx-auto max-w-3xl text-center">
+        <div className="anim-rise mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/90 backdrop-blur">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#b8f34a] pulse-ring" />
+          Built for villages · Works offline-first
+        </div>
+        <h1 className="anim-rise delay-1 font-display text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
+          Your village,{" "}
+          <span className="shimmer-text">smarter decisions</span>
+        </h1>
+        <p className="anim-rise delay-2 mx-auto mt-5 max-w-xl text-base text-white/70 sm:text-lg">
+          Irrigation advice, yield estimates, mandi math, health triage and micro-credit guidance — clear answers in seconds.
+        </p>
+        <div className="anim-rise delay-3 mt-8 flex flex-wrap items-center justify-center gap-3">
+          <Link to="/agriculture" className="btn-primary pulse-ring">
+            <Leaf className="h-4 w-4" /> Start with farming
+          </Link>
+          <Link to="/healthcare" className="btn-ghost !border-white/20 !bg-white/10 !text-white hover:!bg-white/20">
+            <HeartPulse className="h-4 w-4" /> Health check
+          </Link>
+          <Link to="/finance" className="btn-ghost !border-white/20 !bg-white/10 !text-white hover:!bg-white/20">
+            <Wallet className="h-4 w-4" /> Finance tools
+          </Link>
+        </div>
+        <div className="anim-rise delay-4 mt-10 flex flex-wrap justify-center gap-6 text-left">
+          {[
+            { n: "9", l: "Live tools" },
+            { n: "3", l: "Life pillars" },
+            { n: "108", l: "Emergency" },
+          ].map((s) => (
+            <div key={s.l} className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 backdrop-blur">
+              <p className="font-display text-2xl font-extrabold text-[#b8f34a]">{s.n}</p>
+              <p className="text-xs font-medium text-white/60">{s.l}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
 }
-export default Hero;

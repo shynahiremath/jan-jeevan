@@ -1,11 +1,11 @@
 import Header from "./Header";
 import Footer from "./Footer";
 
-export default function Layout({ children, className = "" }) {
+export default function Layout({ children }) {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50">
+    <div className="flex min-h-screen flex-col">
       <Header />
-      <main className={`flex-1 ${className}`}>{children}</main>
+      <main className="flex-1">{children}</main>
       <Footer />
     </div>
   );
