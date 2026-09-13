@@ -3,67 +3,131 @@
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --color-brand-50: #f0fdf6;
-  --color-brand-100: #dcfce9;
-  --color-brand-200: #bbf7d4;
-  --color-brand-300: #86efb0;
-  --color-brand-400: #4ade80;
-  --color-brand-500: #22c55e;
-  --color-brand-600: #16a34a;
-  --color-brand-700: #15803d;
-  --color-brand-800: #166534;
-  --color-brand-900: #14532d;
+  --color-brand-50: #ecfdf5;
+  --color-brand-100: #d1fae5;
+  --color-brand-200: #a7f3d0;
+  --color-brand-300: #6ee7b7;
+  --color-brand-400: #34d399;
+  --color-brand-500: #10b981;
+  --color-brand-600: #059669;
+  --color-brand-700: #047857;
+  --color-brand-800: #065f46;
+  --color-brand-900: #064e3b;
   --color-accent-50: #fff7ed;
   --color-accent-100: #ffedd5;
+  --color-accent-200: #fed7aa;
+  --color-accent-400: #fb923c;
   --color-accent-500: #f97316;
   --color-accent-600: #ea580c;
+  --color-violet-soft: #f5f3ff;
+  --color-sky-soft: #f0f9ff;
+  --color-rose-soft: #fff1f2;
+  --color-amber-soft: #fffbeb;
 }
 
 @layer base {
   html { scroll-behavior: smooth; }
   body {
-    @apply bg-slate-50 text-slate-800 font-sans antialiased;
+    @apply bg-gradient-to-br from-slate-50 via-emerald-50/30 to-orange-50/20 text-slate-800 font-sans antialiased min-h-screen;
   }
   h1, h2, h3, h4 { font-family: var(--font-display); }
+  ::selection {
+    @apply bg-brand-200 text-brand-900;
+  }
 }
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm
-           transition-all duration-200 hover:bg-brand-700 hover:shadow-md active:scale-[0.98]
-           disabled:opacity-50 disabled:pointer-events-none;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-brand-500/25
+           transition-all duration-300 hover:from-brand-600 hover:to-brand-700 hover:shadow-xl hover:shadow-brand-500/30 hover:-translate-y-0.5 active:scale-[0.98]
+           disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0;
   }
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700
-           shadow-sm transition-all duration-200 hover:bg-slate-50 hover:border-slate-300 active:scale-[0.98];
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200/80 bg-white/90 backdrop-blur px-5 py-2.5 text-sm font-semibold text-slate-700
+           shadow-sm transition-all duration-300 hover:bg-white hover:border-brand-200 hover:shadow-md hover:-translate-y-0.5 active:scale-[0.98];
   }
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-white/80 hover:text-slate-900 hover:shadow-sm;
   }
   .btn-danger {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-red-700 active:scale-[0.98];
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-500 to-rose-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-red-500/25
+           transition-all duration-300 hover:from-red-600 hover:to-rose-700 hover:shadow-xl active:scale-[0.98];
   }
   .card {
-    @apply rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300;
+    @apply rounded-2xl border border-white/60 bg-white/80 backdrop-blur-sm p-6 shadow-lg shadow-slate-200/50 transition-all duration-300;
   }
   .card-hover {
-    @apply card hover:shadow-lg hover:border-brand-200 hover:-translate-y-0.5 cursor-pointer;
+    @apply card hover:shadow-2xl hover:shadow-brand-500/10 hover:border-brand-200/80 hover:-translate-y-1.5 cursor-pointer;
   }
   .input-field {
-    @apply w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 shadow-sm transition
-           focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20;
+    @apply w-full rounded-xl border border-slate-200/80 bg-white/90 px-4 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 shadow-sm transition-all duration-200
+           focus:border-brand-400 focus:outline-none focus:ring-4 focus:ring-brand-500/15 focus:bg-white;
   }
   .label { @apply mb-1.5 block text-sm font-medium text-slate-700; }
-  .badge { @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium; }
-  .badge-green { @apply badge bg-brand-100 text-brand-800; }
-  .badge-amber { @apply badge bg-amber-100 text-amber-800; }
-  .badge-red { @apply badge bg-red-100 text-red-800; }
-  .badge-slate { @apply badge bg-slate-100 text-slate-600; }
+  .badge { @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold; }
+  .badge-green { @apply badge bg-gradient-to-r from-brand-100 to-emerald-100 text-brand-800 ring-1 ring-brand-200/50; }
+  .badge-amber { @apply badge bg-gradient-to-r from-amber-100 to-orange-100 text-amber-800 ring-1 ring-amber-200/50; }
+  .badge-red { @apply badge bg-gradient-to-r from-red-100 to-rose-100 text-red-800 ring-1 ring-red-200/50; }
+  .badge-slate { @apply badge bg-slate-100 text-slate-600 ring-1 ring-slate-200/50; }
   .section-title { @apply text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl; }
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/50 shadow-xl;
+  }
+  .gradient-text {
+    @apply bg-gradient-to-r from-brand-600 via-emerald-500 to-teal-500 bg-clip-text text-transparent;
+  }
 }
 
 @keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.animate-fade-in-up { animation: fade-in-up 0.45s ease-out forwards; }
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.5), 0 0 60px rgba(16, 185, 129, 0.2); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes blob {
+  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+}
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-fade-in-up { animation: fade-in-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.animate-fade-in { animation: fade-in 0.4s ease-out forwards; }
+.animate-scale-in { animation: scale-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.animate-float { animation: float 4s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulse-glow 2.5s ease-in-out infinite; }
+.animate-blob { animation: blob 8s ease-in-out infinite; }
+.animate-slide-in { animation: slide-in-right 0.4s ease-out forwards; }
+
+.stagger-1 { animation-delay: 0.05s; opacity: 0; }
+.stagger-2 { animation-delay: 0.1s; opacity: 0; }
+.stagger-3 { animation-delay: 0.15s; opacity: 0; }
+.stagger-4 { animation-delay: 0.2s; opacity: 0; }
+.stagger-5 { animation-delay: 0.25s; opacity: 0; }
+.stagger-6 { animation-delay: 0.3s; opacity: 0; }
+
+.shimmer-bg {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
