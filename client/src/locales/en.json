@@ -1,30 +1,30 @@
 {
-  "appName": "Jan Setu",
+  "appName": "Jan Jeevan",
   "emergency": "Emergency",
   "login": "Login",
   "heroTitle": "One place for everyday help.",
-  "heroSubtitle": "Speak. Scan. Understand. Connect.",
+  "heroSubtitle": "Speak. Scan. Understand. Connect — built for rural India.",
   "tapToSpeak": "TAP TO SPEAK",
-  "voiceComingSoon": "Voice feature coming soon",
+  "voiceComingSoon": "Voice assistant ready — try speaking in your language",
   "helpQuestion": "What do you need help with today?",
   "pillars": {
     "agriculture": {
       "title": "Agriculture",
-      "description": "Weather, mandi prices, crop help"
+      "description": "Smart irrigation, yield prediction & direct market access"
     },
     "healthcare": {
       "title": "Healthcare",
-      "description": "Symptom check, hospitals, reports"
+      "description": "Remote checks, local alerts & digital health records"
     },
     "finance": {
-      "title": "Finance",
-      "description": "EMI calculator, fraud check, schemes"
+      "title": "Fin-Inclusion",
+      "description": "Credit scoring, easy payments & community savings"
     },
     "schemes": {
       "title": "Govt. Schemes",
       "description": "Find schemes you may qualify for"
     }
   },
-  "footerTagline": "A voice-first, visual-first digital public-service platform for underserved communities.",
-  "footerNote": "Built for a hackathon • Data sources credited within each feature"
+  "footerTagline": "A voice-first, visual-first digital public-service platform for underserved communities across rural India.",
+  "footerNote": "Built for impact • Data sources credited within each feature"
 }

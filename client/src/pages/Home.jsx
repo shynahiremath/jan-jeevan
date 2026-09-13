@@ -1,8 +1,7 @@
 import { useTranslation } from "react-i18next";
-import Header from "../components/Header";
+import Layout from "../components/Layout";
 import Hero from "../components/Hero";
 import PillarCard from "../components/PillarCard";
-import Footer from "../components/Footer";
 
 function Home() {
   const { t } = useTranslation();
@@ -12,57 +11,53 @@ function Home() {
       icon: "🌾",
       title: t("pillars.agriculture.title"),
       description: t("pillars.agriculture.description"),
-      color: "border-green-200 bg-green-50",
       path: "/agriculture",
+      variant: "agriculture",
+      features: ["Smart Irrigation recommendations", "Crop Yield Prediction", "Direct-to-Market Logistics"],
     },
     {
-      icon: "🏥",
+      icon: "🩺",
       title: t("pillars.healthcare.title"),
       description: t("pillars.healthcare.description"),
-      color: "border-red-200 bg-red-50",
       path: "/healthcare",
+      variant: "healthcare",
+      features: ["Remote Health Check", "Local Health Watch alerts", "Digital Patient Records"],
     },
     {
       icon: "💰",
       title: t("pillars.finance.title"),
       description: t("pillars.finance.description"),
-      color: "border-yellow-200 bg-yellow-50",
       path: "/finance",
+      variant: "finance",
+      features: ["Micro-Credit Scoring", "Assisted Digital Payments", "Community Savings"],
     },
     {
       icon: "🏛️",
       title: t("pillars.schemes.title"),
       description: t("pillars.schemes.description"),
-      color: "border-blue-200 bg-blue-50",
       path: "/schemes",
+      variant: "schemes",
+      features: ["Find schemes you qualify for", "Simple eligibility check"],
     },
   ];
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      <Header />
+    <Layout>
       <Hero />
-
-      <main className="flex-1 max-w-6xl mx-auto px-4 py-10 w-full">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-          {t("helpQuestion")}
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {pillars.map((pillar) => (
-            <PillarCard
-              key={pillar.title}
-              icon={pillar.icon}
-              title={pillar.title}
-              description={pillar.description}
-              color={pillar.color}
-              path={pillar.path}
-            />
+      <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+        <div className="mb-10 text-center">
+          <h2 className="section-title mb-3">{t("helpQuestion")}</h2>
+          <p className="text-slate-500 max-w-lg mx-auto">Choose a pillar to get practical help designed for rural communities.</p>
+        </div>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {pillars.map((p, i) => (
+            <div key={p.path} className="animate-fade-in-up" style={{ animationDelay: `${i * 0.07}s` }}>
+              <PillarCard {...p} />
+            </div>
           ))}
         </div>
-      </main>
-
-      <Footer />
-    </div>
+      </section>
+    </Layout>
   );
 }
 
