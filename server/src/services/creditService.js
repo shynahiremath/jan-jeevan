@@ -4,32 +4,49 @@ export function scoreMicroCredit({ income, expenses, savings, land, livestock })
   const currentSavings = Number(savings) || 0;
   const landAcres = Number(land) || 0;
   const livestockCount = Number(livestock) || 0;
+  const surplus = monthlyIncome - monthlyExpenses;
 
   let s = 40;
-  if (monthlyIncome > monthlyExpenses) s += 15;
+  if (surplus > 0) s += 15;
   if (monthlyIncome > 0 && currentSavings > monthlyIncome * 0.1) s += 10;
   if (landAcres > 0) s += 12;
   if (landAcres >= 2) s += 5;
   if (livestockCount > 0) s += 8;
   if (monthlyIncome > 15000) s += 10;
   if (monthlyIncome > 30000) s += 5;
-  if (monthlyExpenses > monthlyIncome) s -= 10;
-
+  if (surplus < 0) s -= 10;
   s = Math.min(95, Math.max(25, Math.round(s)));
 
   const band = s >= 75 ? "Good" : s >= 55 ? "Fair" : "Needs improvement";
+  const maxLoan =
+    band === "Good" ? Math.min(200000, Math.max(25000, surplus * 18)) :
+    band === "Fair" ? Math.min(75000, Math.max(10000, surplus * 10)) :
+    Math.min(25000, Math.max(5000, Math.abs(surplus) * 4));
+
   const tip =
     band === "Good"
-      ? "You may qualify for micro-loans from SHG / bank BC."
+      ? "Strong profile for SHG / Mudra / bank BC micro-loans. Carry Aadhaar, land papers and 3 months cash-flow notes."
       : band === "Fair"
-      ? "Build a short savings track record and document income for better offers."
-      : "Improve savings ratio and document income for better offers.";
+      ? "Build 3 months of savings trail and keep expense receipts to improve offers."
+      : "Focus on positive monthly surplus first; join a local SHG for group lending.";
+
+  const checklist = [
+    surplus > 0 ? "Monthly surplus is positive — good signal." : "Expenses exceed income — cut non-essentials or add income.",
+    currentSavings > 0 ? "Some savings present." : "Start a small weekly savings habit.",
+    landAcres > 0 ? "Land asset strengthens collateral-style confidence." : "No land listed — livestock / SHG membership can help.",
+  ];
 
   return {
     score: s,
     band,
     tip,
-    inputs: { monthlyIncome, monthlyExpenses, currentSavings, landAcres, livestockCount },
-    disclaimer: "Demo score for guidance only. Banks use KYC and bureau data.",
+    suggestedLoanRange: {
+      min: Math.round(maxLoan * 0.4),
+      max: Math.round(maxLoan),
+      currency: "INR",
+    },
+    checklist,
+    inputs: { monthlyIncome, monthlyExpenses, currentSavings, landAcres, livestockCount, surplus },
+    disclaimer: "Guidance score only. Final decisions depend on KYC and lender policy.",
   };
 }
