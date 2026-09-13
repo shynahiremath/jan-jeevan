@@ -10,7 +10,7 @@ export const protect = (req, res, next) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "jan-jeevan-dev-secret-change-me");
     req.userId = decoded.userId;
     next();
   } catch (error) {
@@ -18,8 +18,6 @@ export const protect = (req, res, next) => {
   }
 };
 
-
-// Doesn't block the request if no token — just attaches userId if a valid token exists
 export const optionalAuth = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -30,10 +28,10 @@ export const optionalAuth = (req, res, next) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "jan-jeevan-dev-secret-change-me");
     req.userId = decoded.userId;
   } catch (error) {
-    // Invalid token — just proceed as if not logged in, don't block
+    // Invalid token — proceed as guest
   }
 
   next();
