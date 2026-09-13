@@ -1,22 +1,14 @@
 import { fetchMandiPrices } from "../services/mandiService.js";
 
-// GET /api/mandi-prices?state=..&commodity=..
 export const getMandiPrices = async (req, res) => {
   try {
     const { state, commodity } = req.query;
+    const { records, fromCache, source } = await fetchMandiPrices({ state, commodity });
 
-    if (!state && !commodity) {
-      return res.status(400).json({
-        message: "Please provide at least a state or a commodity to search.",
-      });
-    }
-
-    const { records, fromCache } = await fetchMandiPrices({ state, commodity });
-
-    if (records.length === 0) {
+    if (!records.length) {
       return res.status(200).json({
         prices: [],
-        message: "No prices found for this search. This mandi/crop combo may not have reported today, or try a different state or crop name.",
+        message: "No prices found for this search. Try a different state or crop.",
       });
     }
 
@@ -27,23 +19,26 @@ export const getMandiPrices = async (req, res) => {
       commodity: r.commodity,
       variety: r.variety,
       grade: r.grade,
-      minPrice: r.min_price,
-      maxPrice: r.max_price,
-      modalPrice: r.modal_price,
+      minPrice: Number(r.min_price) || 0,
+      maxPrice: Number(r.max_price) || 0,
+      modalPrice: Number(r.modal_price) || 0,
+      min: Number(r.min_price) || 0,
+      max: Number(r.max_price) || 0,
+      modal: Number(r.modal_price) || 0,
       arrivalDate: r.arrival_date,
     }));
 
     res.status(200).json({
       prices,
-      source: "data.gov.in — Ministry of Agriculture and Farmers Welfare",
+      source: source === "mock"
+        ? "Sample mandi rates (set MANDI_API_KEY for live data.gov.in)"
+        : "data.gov.in — Ministry of Agriculture and Farmers Welfare",
       sourceUrl: "https://www.data.gov.in/resource/current-daily-price-various-commodities-various-markets-mandi",
-      updateFrequency: "Daily",
-      fromCache,
+      updateFrequency: source === "mock" ? "Demo" : "Daily",
+      fromCache: !!fromCache,
     });
   } catch (error) {
-    console.error("Mandi price fetch error:", error.message);
-    res.status(503).json({
-      message: "Could not fetch mandi prices right now. Please try again shortly.",
-    });
+    console.error("Mandi price error:", error.message);
+    res.status(503).json({ message: "Could not fetch mandi prices right now." });
   }
 };

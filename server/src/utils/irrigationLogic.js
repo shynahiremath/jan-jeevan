@@ -1,40 +1,68 @@
-// CALCULATED_DATA — simple rule-based logic combining real weather
-// data with the user's own inputs. This is NOT an AI model and NOT
-// a measurement — it's a transparent if/else recommendation.
-
 export const getIrrigationAdvice = ({ temperature, precipitation, soilMoisture, cropType }) => {
-  // soilMoisture: "low" | "medium" | "high"
-  // cropType: free text, only a few common crops get tailored notes
+  let urgency = "normal";
+  let litersPerAcre = 0;
+  const crop = (cropType || "general").toLowerCase();
+  const rain = Number(precipitation) || 0;
+  const temp = Number(temperature) || 30;
+  const recentlyRained = rain > 1;
 
-  let advice = "";
-  let urgency = "normal"; // "low" | "normal" | "high"
-
-  const recentlyRained = precipitation > 1; // mm in the last hour
+  const cropNeed = {
+    rice: 25000, wheat: 12000, maize: 15000, cotton: 14000,
+    sugarcane: 20000, onion: 10000, potato: 11000, soybean: 10000,
+  };
+  const base = cropNeed[crop] || 12000;
 
   if (soilMoisture === "low" && !recentlyRained) {
-    advice = "Soil moisture is low and there's been no recent rain. Consider watering today.";
     urgency = "high";
+    litersPerAcre = Math.round(base * (temp > 35 ? 1.25 : 1));
   } else if (soilMoisture === "low" && recentlyRained) {
-    advice = "Soil moisture is low, but it has rained recently. Check the soil by hand before watering.";
     urgency = "normal";
+    litersPerAcre = Math.round(base * 0.4);
   } else if (soilMoisture === "medium") {
-    advice = recentlyRained
-      ? "Soil moisture is adequate and recent rain has helped. No watering needed right now."
-      : "Soil moisture is adequate. Monitor and water in the next day or two if no rain comes.";
-    urgency = "normal";
+    urgency = recentlyRained ? "low" : "normal";
+    litersPerAcre = recentlyRained ? 0 : Math.round(base * 0.55);
   } else if (soilMoisture === "high") {
-    advice = "Soil moisture is already high. Avoid watering to prevent waterlogging.";
     urgency = "low";
+    litersPerAcre = 0;
+  } else {
+    litersPerAcre = Math.round(base * 0.5);
   }
 
-  if (temperature > 35) {
-    advice += " Note: high temperature today may increase water evaporation faster than usual.";
+  if (temp > 38 && soilMoisture !== "high") {
+    urgency = urgency === "low" ? "normal" : "high";
+    litersPerAcre = Math.round(litersPerAcre * 1.15);
   }
+
+  const when =
+    urgency === "high" ? "Irrigate within 12–24 hours (early morning or evening)." :
+    urgency === "normal" ? "Plan irrigation in the next 1–2 days if no rain is expected." :
+    "Skip irrigation for now. Re-check soil in 2–3 days.";
+
+  const method =
+    crop === "rice" ? "Maintain standing water carefully; avoid overflow." :
+    "Prefer furrow / drip if available to save 20–40% water vs flood.";
+
+  const tips = [
+    "Feel the soil 10–15 cm deep — if it crumbles dry, water is needed.",
+    "Avoid midday irrigation in extreme heat to reduce evaporation loss.",
+    "Mulch with crop residue to hold moisture longer.",
+  ];
+  if (recentlyRained) tips.unshift("Recent rain already added moisture — do not overwater.");
+  if (temp > 35) tips.push("High temperature increases evaporation; prefer evening irrigation.");
+
+  const advice =
+    litersPerAcre > 0
+      ? `Suggested about ${litersPerAcre.toLocaleString()} litres/acre (${(litersPerAcre / 1000).toFixed(1)} kL/acre). ${when}`
+      : `No irrigation needed right now. ${when}`;
 
   return {
     advice,
     urgency,
+    litersPerAcre,
+    when,
+    method,
+    tips,
     cropType: cropType || "general",
-    label: "Smart recommendation — based on real weather + your input, not a substitute for expert advice.",
+    label: "Practical estimate from weather + your soil input — adjust for local field conditions.",
   };
 };
